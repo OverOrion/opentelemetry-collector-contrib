@@ -3,6 +3,7 @@ package deltatocumulativeprocessor
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/open-telemetry/opentelemetry-collector-contrib/processor/deltatocumulativeprocessor/internal/metadata"
 	"go.opentelemetry.io/collector/component"
@@ -19,13 +20,16 @@ func NewFactory() processor.Factory {
 }
 
 func createDefaultConfig() component.Config {
-
+	return &Config{
+		Interval: 60 * time.Second,
+	}
 }
 
 func createMetricsProcessor(ctx context.Context, set processor.CreateSettings, cfg component.Config, next consumer.Metrics) (processor.Metrics, error) {
-	cfg, ok := cfg.(*Config)
+	pcfg, ok := cfg.(*Config)
 	if !ok {
 		return nil, fmt.Errorf("configuration parsing error")
 	}
 
+	return NewProcessor(pcfg, set.Logger, next), nil
 }
