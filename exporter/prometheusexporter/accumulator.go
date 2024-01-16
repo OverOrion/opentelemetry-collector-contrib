@@ -201,8 +201,8 @@ func (a *lastValueAccumulator) accumulateSum(metric pmetric.Metric, il pcommon.I
 		}
 
 		// Delta-to-Cumulative
-		if doubleSum.AggregationTemporality() == pmetric.AggregationTemporalityDelta && ip.StartTimestamp() == mv.value.Sum().DataPoints().At(0).Timestamp() {
-			ip.SetStartTimestamp(mv.value.Sum().DataPoints().At(0).StartTimestamp())
+		if doubleSum.AggregationTemporality() == pmetric.AggregationTemporalityDelta /*&& ip.StartTimestamp() == mv.value.Sum().DataPoints().At(0).Timestamp()*/ {
+			//ip.SetStartTimestamp(mv.value.Sum().DataPoints().At(0).StartTimestamp())
 			switch ip.ValueType() {
 			case pmetric.NumberDataPointValueTypeInt:
 				ip.SetIntValue(ip.IntValue() + mv.value.Sum().DataPoints().At(0).IntValue())

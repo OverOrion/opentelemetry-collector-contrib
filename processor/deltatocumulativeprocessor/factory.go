@@ -21,7 +21,7 @@ func NewFactory() processor.Factory {
 
 func createDefaultConfig() component.Config {
 	return &Config{
-		Interval: 60 * time.Second,
+		Interval: 5 * time.Second,
 	}
 }
 
