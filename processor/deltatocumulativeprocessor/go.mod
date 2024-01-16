@@ -42,4 +42,5 @@ require (
 )
 
 replace github.com/open-telemetry/opentelemetry-collector-contrib/pkg/pdatautil => ../../pkg/pdatautil
-replace github.com/open-telemetry/opentelemetry-collector-contrib/processor/deltatocumulativeprocessor => github.com/OverOrion/opentelemetry-collector-contrib/processor/deltatocumulativeprocessor
+
+//replace github.com/open-telemetry/opentelemetry-collector-contrib/processor/deltatocumulativeprocessor => /home/orion/work/others/open-telemetry/opentelemetry-collector-contrib/processor/deltatocumulativeprocessor

@@ -105,6 +105,7 @@ processors:
   - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/processor/tailsamplingprocessor v0.89.0
   - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/processor/transformprocessor v0.89.0
   - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/processor/remotetapprocessor v0.89.0
+  - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/processor/deltatocumulativeprocessor v0.0.0-20230822172742-7e8123349a32
 
 receivers:
   - gomod: go.opentelemetry.io/collector/receiver/otlpreceiver v0.89.0
@@ -410,6 +411,7 @@ replaces:
   - github.com/open-telemetry/opentelemetry-collector-contrib/extension/observer/ecsobserver => ../../extension/observer/ecsobserver
   - github.com/open-telemetry/opentelemetry-collector-contrib/processor/remotetapprocessor => ../../processor/remotetapprocessor
   - github.com/open-telemetry/opentelemetry-collector-contrib/processor/sumologicprocessor => ../../processor/sumologicprocessor
+  - github.com/open-telemetry/opentelemetry-collector-contrib/processor/deltatocumulativeprocessor => ../../processor/deltatocumulativeprocessor
   - github.com/open-telemetry/opentelemetry-collector-contrib/exporter/syslogexporter => ../../exporter/syslogexporter
   # see https://github.com/mattn/go-ieproxy/issues/45
   - github.com/mattn/go-ieproxy => github.com/mattn/go-ieproxy v0.0.1
