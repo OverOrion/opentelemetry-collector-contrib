@@ -273,7 +273,7 @@ genotelcontribcol: $(BUILDER)
 # Build the Collector executable.
 .PHONY: otelcontribcol
 otelcontribcol:
-	cd ./cmd/otelcontribcol && GO111MODULE=on CGO_ENABLED=0 $(GOCMD) build -v -trimpath -o ../../bin/otelcontribcol_$(GOOS)_$(GOARCH)$(EXTENSION) \
+	cd ./cmd/otelcontribcol && GO111MODULE=on CGO_ENABLED=0 $(GOCMD) build -gcflags="all=-N -l" -v -trimpath -o ../../bin/otelcontribcol_$(GOOS)_$(GOARCH)$(EXTENSION) \
 		-tags $(GO_BUILD_TAGS) .
 
 .PHONY: genoteltestbedcol
