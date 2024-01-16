@@ -10,7 +10,7 @@ import (
 var _ component.ConfigValidator = (*Config)(nil)
 
 type Config struct {
-	Interval time.Duration
+	Interval time.Duration `mapstructure:"interval"`
 }
 
 func (c *Config) Validate() error {
