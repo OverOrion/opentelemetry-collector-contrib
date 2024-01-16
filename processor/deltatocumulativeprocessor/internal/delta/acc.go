@@ -33,7 +33,7 @@ func (a *Accumulator) Aggregate(id streams.Ident, dp pmetric.NumberDataPoint) {
 }
 
 func (a *Accumulator) Value(id streams.Ident) pmetric.NumberDataPoint {
-	var dp pmetric.NumberDataPoint
+	var dp pmetric.NumberDataPoint = pmetric.NewNumberDataPoint()
 
 	v, ok := a.vals[id]
 	if !ok {

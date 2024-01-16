@@ -11,29 +11,45 @@ type Map struct {
 	metrics   map[Ident]pmetric.Metric
 }
 
-func (mm Map) For(id Ident) (pcommon.Resource, pcommon.InstrumentationScope, pmetric.Metric) {
-	if mm.resources == nil || mm.scopes == nil || mm.metrics == nil {
+func (mm *Map) For(id Ident) (*pcommon.Resource, *pcommon.InstrumentationScope, *pmetric.Metric) {
+	if mm.resources == nil {
 		mm.resources = make(map[ResourceIdent]pcommon.Resource)
+	}
+
+	if mm.scopes == nil {
 		mm.scopes = make(map[ScopeIdent]pcommon.InstrumentationScope)
+
+	}
+
+	if mm.metrics == nil {
 		mm.metrics = make(map[Ident]pmetric.Metric)
 	}
 
 	res, ok := mm.resources[id.ResourceIdent]
 	if !ok {
+		res = pcommon.NewResource()
 		mm.resources[id.ResourceIdent] = res
 	}
 
 	sc, ok := mm.scopes[id.ScopeIdent]
 	if !ok {
+		sc = pcommon.NewInstrumentationScope()
 		mm.scopes[id.ScopeIdent] = sc
 	}
 
 	m, ok := mm.metrics[id]
 	if !ok {
+		// metricsSlice := pmetric.NewMetricSlice()
+		// metricsSlice.AppendEmpty()
+		// metaMetric := metricsSlice.At(0)
+
+		metaMetric := pmetric.NewMetric()
+
+		m = metaMetric
 		mm.metrics[id] = m
 	}
 
-	return res, sc, m
+	return &res, &sc, &m
 }
 
 func (mm Map) Merge() pmetric.Metrics {

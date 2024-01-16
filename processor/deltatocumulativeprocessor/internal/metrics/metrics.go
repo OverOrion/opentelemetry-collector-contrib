@@ -1,6 +1,8 @@
 package metrics
 
 import (
+	"reflect"
+
 	"go.opentelemetry.io/collector/pdata/pcommon"
 	"go.opentelemetry.io/collector/pdata/pmetric"
 )
@@ -16,6 +18,12 @@ func (m *Metric) Meta() Meta {
 		resource: m.res,
 		scope:    m.scope,
 	}
+
+	metricsSlice := pmetric.NewMetricSlice()
+	metricsSlice.AppendEmpty()
+
+	metaMetric := metricsSlice.At(0)
+	meta.metric = metaMetric
 	m.CopyTo(meta.metric)
 	metric := &meta.metric
 
@@ -36,6 +44,13 @@ func (m *Metric) Meta() Meta {
 		meta.temporality = metric.ExponentialHistogram().AggregationTemporality()
 		meta.monotonic = true
 		metric.SetEmptyExponentialHistogram()
+	}
+
+	// Sanity check here
+	state := reflect.ValueOf(metric).Elem().FieldByName("state")
+
+	if state.Elem().Int() != 0 {
+		panic("invalid access to shared data")
 	}
 
 	return meta
