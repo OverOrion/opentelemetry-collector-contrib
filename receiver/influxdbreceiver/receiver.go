@@ -73,6 +73,7 @@ func (r *metricsReceiver) Start(_ context.Context, host component.Host) error {
 	router := http.NewServeMux()
 	router.HandleFunc("/write", r.handleWrite)        // InfluxDB 1.x
 	router.HandleFunc("/api/v2/write", r.handleWrite) // InfluxDB 2.x
+	router.HandleFunc("/ping", r.handlePing)
 
 	r.wg.Add(1)
 	r.server, err = r.httpServerSettings.ToServer(host, r.settings, router)
@@ -82,7 +83,7 @@ func (r *metricsReceiver) Start(_ context.Context, host component.Host) error {
 	go func() {
 		defer r.wg.Done()
 		if errHTTP := r.server.Serve(ln); !errors.Is(errHTTP, http.ErrServerClosed) && errHTTP != nil {
-			host.ReportFatalError(errHTTP)
+			r.settings.ReportStatus(component.NewFatalErrorEvent(errHTTP))
 		}
 	}()
 
@@ -199,5 +200,9 @@ func (r *metricsReceiver) handleWrite(w http.ResponseWriter, req *http.Request) 
 		return
 	}
 
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (r *metricsReceiver) handlePing(w http.ResponseWriter, _ *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }

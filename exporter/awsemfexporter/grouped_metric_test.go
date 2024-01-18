@@ -114,7 +114,7 @@ func TestAddToGroupedMetric(t *testing.T) {
 					nil,
 					testCfg,
 					emfCalcs)
-				assert.Nil(t, err)
+				assert.NoError(t, err)
 			}
 
 			assert.Equal(t, 1, len(groupedMetrics))
@@ -157,7 +157,7 @@ func TestAddToGroupedMetric(t *testing.T) {
 				nil,
 				testCfg,
 				emfCalcs)
-			assert.Nil(t, err)
+			assert.NoError(t, err)
 		}
 
 		assert.Equal(t, 4, len(groupedMetrics))
@@ -192,7 +192,7 @@ func TestAddToGroupedMetric(t *testing.T) {
 		}
 	})
 
-	t.Run("Add multiple different metrics with NaN types", func(t *testing.T) {
+	t.Run("Add multiple different metrics with NaN and Inf types", func(t *testing.T) {
 		emfCalcs := setupEmfCalculators()
 		defer require.NoError(t, shutdownEmfCalculators(emfCalcs))
 
@@ -204,18 +204,23 @@ func TestAddToGroupedMetric(t *testing.T) {
 			generateTestSumMetric("int-sum", intValueType),
 			generateTestSumMetric("double-sum", doubleValueType),
 			generateTestSummaryMetric("summary"),
-			// We do not expect these to be added to the grouped metric. Metrics with NaN values should be dropped.
+			// We do not expect these to be added to the grouped metric. Metrics with NaN or Inf values should be dropped.
 			generateTestGaugeMetricNaN("double-gauge-nan"),
 			generateTestExponentialHistogramMetricWithNaNs("expo-with-nan"),
 			generateTestHistogramMetricWithNaNs("histo-with-nan"),
 			generateTestSummaryMetricWithNaN("sum-with-nan"),
+			generateTestGaugeMetricInf("double-gauge-inf"),
+			generateTestExponentialHistogramMetricWithInfs("expo-with-inf"),
+			generateTestHistogramMetricWithInfs("histo-with-inf"),
+			generateTestSummaryMetricWithInf("sum-with-inf"),
 		}
 
 		finalOtelMetrics := generateOtelTestMetrics(generateMetrics...)
 		rms := finalOtelMetrics.ResourceMetrics()
 		ilms := rms.At(0).ScopeMetrics()
 		metrics := ilms.At(0).Metrics()
-		require.Equal(t, 14, metrics.Len(), "mock metric creation failed")
+		// Verify if all metrics are generated, including NaN, Inf values
+		require.Equal(t, 19, metrics.Len(), "mock metric creation failed")
 		for i := 0; i < metrics.Len(); i++ {
 			err := addToGroupedMetric(metrics.At(i),
 				groupedMetrics,
@@ -225,7 +230,7 @@ func TestAddToGroupedMetric(t *testing.T) {
 				nil,
 				testCfg,
 				emfCalcs)
-			assert.Nil(t, err)
+			assert.NoError(t, err)
 		}
 
 		assert.Equal(t, 4, len(groupedMetrics))
@@ -276,7 +281,7 @@ func TestAddToGroupedMetric(t *testing.T) {
 			nil,
 			testCfg,
 			emfCalcs)
-		assert.Nil(t, err)
+		assert.NoError(t, err)
 
 		metricMetadata2 := generateTestMetricMetadata(namespace,
 			timestamp,
@@ -286,7 +291,7 @@ func TestAddToGroupedMetric(t *testing.T) {
 			metric.Type(),
 		)
 		err = addToGroupedMetric(metric, groupedMetrics, metricMetadata2, true, logger, nil, testCfg, emfCalcs)
-		assert.Nil(t, err)
+		assert.NoError(t, err)
 
 		assert.Len(t, groupedMetrics, 2)
 		seenLogGroup1 := false
@@ -344,7 +349,7 @@ func TestAddToGroupedMetric(t *testing.T) {
 				testCfg,
 				emfCalcs,
 			)
-			assert.Nil(t, err)
+			assert.NoError(t, err)
 		}
 		assert.Equal(t, 1, len(groupedMetrics))
 
@@ -387,7 +392,7 @@ func TestAddToGroupedMetric(t *testing.T) {
 			testCfg,
 			emfCalcs,
 		)
-		assert.Nil(t, err)
+		assert.NoError(t, err)
 		assert.Equal(t, 0, len(groupedMetrics))
 
 		// Test output warning logs
