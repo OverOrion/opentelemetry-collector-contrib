@@ -90,7 +90,5 @@ replace github.com/open-telemetry/opentelemetry-collector-contrib/pkg/pdatautil 
 replace github.com/open-telemetry/opentelemetry-collector-contrib/pkg/pdatatest => ../pdatatest
 
 replace github.com/open-telemetry/opentelemetry-collector-contrib/pkg/golden => ../golden
-
-replace go.opentelemetry.io/collector/pdata => /home/orion/work/others/open-telemetry/opentelemetry-collector/pdata
-
-replace go.opentelemetry.io/collector/receiver => /home/orion/work/others/open-telemetry/opentelemetry-collector/receiver
+replace go.opentelemetry.io/collector/pdata => github.com/overorion/opentelemetry-collector/pdata v0.98.0-bytesboth
+replace go.opentelemetry.io/collector/receiver => github.com/overorion/opentelemetry-collector/receiver v0.98.0-bytesboth
