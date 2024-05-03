@@ -87,4 +87,5 @@ replace github.com/open-telemetry/opentelemetry-collector-contrib/pkg/golden => 
 replace github.com/open-telemetry/opentelemetry-collector-contrib/internal/common => ../../internal/common
 
 replace github.com/open-telemetry/opentelemetry-collector-contrib/pkg/stanza => ../../pkg/stanza
-replace go.opentelemetry.io/collector/receiver => /home/orion/work/others/open-telemetry/opentelemetry-collector/receiver
+
+replace go.opentelemetry.io/collector/receiver => github.com/overorion/opentelemetry-collector/receiver v0.98.0-bytesboth
